@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Samir Pokharel</title>
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <div id="intro-overlay">
+            <h1 id="intro-text" style="opacity: 0">Hello there, Welcome!</h1>
+        </div>
+
+        <div id="dashboard">
+            <div class="status-bar">
+                <span>LOC: KATHMANDU</span>
+                <span id="live-clock">00:00:00</span>
+                <span>WELCOME</span>
+            </div>
+            <div class="bg-watermark">SAMIR POKHAREL</div>
+            <div class="button-container">
+                <div class="box" id="btn-aboutme">
+                    <span class="glitch" data-text="About Me">About Me</span>
+                </div>
+                <div class="box" id="btn-projects">
+                    <span class="glitch" data-text="Projects">Projects</span>
+                </div>
+                <div class="box" id="btn-contact">
+                    <span class="glitch" data-text="Contact">Contact</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-aboutme">
+            <div class="content">
+                <h1>About Me</h1>
+                <p style="font-size: 16px">
+                    My name is Samir Pokharel. I am currently and undergraduate
+                    student of Bachelor's in Computer Engineering studying in
+                    Advanced College of Engineering. I am a keen learner and my
+                    hobbies include drawing and playing video games.
+                </p>
+                <button id="btn-back" class="standard-back-btn">← Back</button>
+            </div>
+            <div id="about-image">
+                <img src="img/profile.jpg" alt="Profile" />
+            </div>
+        </div>
+
+        <div id="section-projects">
+            <button id="btn-back-projects" class="standard-back-btn">
+                ← Back
+            </button>
+            <h1 class="page-title">Projects</h1>
+
+            <div class="projects-grid">
+                <div
+                    class="project-card"
+                    data-url="https://github.com/incingrenSP/online_shop"
+                >
+                    <div class="p-row title">
+                        <h3>Basic Online-Shopping System</h3>
+                    </div>
+                    <div class="p-row demo">
+                        <div class="p-carousel">
+                            <img src="img/online_shop_1.png" alt="Slide 1" />
+                            <img src="img/online_shop_2.png" alt="Slide 2" />
+                            <img src="img/online_shop_3.png" alt="Slide 3" />
+                            <img src="img/online_shop_4.png" alt="Slide 4" />
+                            <img src="img/online_shop_5.png" alt="Slide 5" />
+                        </div>
+                    </div>
+                    <div class="p-row desc">
+                        <p>A simple digital shopping system.</p>
+                    </div>
+                    <div class="p-row tags">
+                        <span>C++</span>
+                    </div>
+                </div>
+                <div
+                    class="project-card"
+                    data-url="https://github.com/incingrenSP/cg-project"
+                >
+                    <div class="p-row title"><h3>Zelda-inspired RPG</h3></div>
+                    <div class="p-row demo">
+                        <div class="p-carousel">
+                            <img src="img/rpg_1.png" alt="Slide 1" />
+                            <img src="img/rpg_2.png" alt="Slide 2" />
+                            <img src="img/rpg_3.png" alt="Slide 3" />
+                            <img src="img/rpg_4.png" alt="Slide 4" />
+                            <img src="img/rpg_5.png" alt="Slide 5" />
+                        </div>
+                    </div>
+                    <div class="p-row desc">
+                        <p>A role-playing game programmed using pygame.</p>
+                    </div>
+                    <div class="p-row tags">
+                        <span>Python</span>
+                    </div>
+                </div>
+
+                <div
+                    class="project-card"
+                    data-url="https://github.com/incingrenSP/fft_cnn"
+                >
+                    <div class="p-row title">
+                        <h3>
+                            Pneumonia Detection using Modified AlexNet and
+                            Inception
+                        </h3>
+                    </div>
+                    <div class="p-row demo">
+                        <div class="p-carousel">
+                            <img src="img/fft_1.png" alt="Slide 1" />
+                            <img src="img/fft_2.png" alt="Slide 2" />
+                            <img src="img/fft_3.png" alt="Slide 3" />
+                        </div>
+                    </div>
+                    <div class="p-row desc">
+                        <p>
+                            A supervised learning-based comparative group
+                            project on pneumonia detection using Fast Fourier
+                            Transform.
+                        </p>
+                    </div>
+                    <div class="p-row tags">
+                        <span>Jupyter Notebook</span> <span>Python</span>
+                    </div>
+                </div>
+
+                <div
+                    class="project-card"
+                    data-url="https://github.com/incingrenSP"
+                >
+                    <div class="p-row title"><h3>Portfolio Site</h3></div>
+                    <div class="p-row demo">
+                        <div class="p-carousel">
+                            <img src="img/port_1.png" alt="Slide 1" />
+                            <img src="img/port_2.png" alt="Slide 2" />
+                            <img src="img/port_3.png" alt="Slide 3" />
+                            <img src="img/port_4.png" alt="Slide 4" />
+                        </div>
+                    </div>
+                    <div class="p-row desc">
+                        <p>Animated portfolio with jQuery transitions.</p>
+                    </div>
+                    <div class="p-row tags">
+                        <span>HTML/CSS</span> <span>jQuery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-contact">
+            <div class="contact-card">
+                <h2>Connect</h2>
+                <a href="#" id="email-link" class="c-link">Email</a>
+                <a href="https://github.com/incingrenSP" class="c-link"
+                    >GitHub</a
+                >
+                <a
+                    href="https://www.linkedin.com/in/samir-pokharel-551734364/"
+                    class="c-link"
+                    >LinkedIn</a
+                >
+                <button id="btn-back-contact" class="standard-back-btn">
+                    Close
+                </button>
+            </div>
+        </div>
+
+        <div id="copy-notification" class="notification">
+            Email copied to clipboard!
+        </div>
+
+        <script src="js/script.js"></script>
+    </body>
+</html>

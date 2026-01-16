@@ -1,0 +1,386 @@
+:root {
+    --bg-dark: #0a0a0a;
+    --card-bg: #111111;
+    --accent: #ffffff;
+    --text-dim: #888888;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background-color: var(--bg-dark);
+    color: white;
+    overflow-x: hidden;
+    background: linear-gradient(270deg, #0a0a0a, #151515, #0a0a0a);
+    background-size: 600% 600%;
+    animation: moveGradient 15s ease infinite;
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* --- DASHBOARD --- */
+#dashboard {
+    display: none;
+    text-align: center;
+    padding: 50px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 80px;
+    font-size: 0.7rem;
+    font-family: monospace;
+    color: #444;
+    border-bottom: 1px solid #1a1a1a;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.bg-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14vw;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.09);
+    z-index: -1;
+    user-select: none;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background: #111;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    border-color: #fff;
+    transform: scale(1.05);
+}
+
+/* --- GLITCH --- */
+.glitch {
+    position: relative;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0.8;
+}
+
+.box:hover .glitch::before {
+    color: #ff00c1;
+    z-index: -1;
+    animation: shift 0.2s infinite;
+}
+.box:hover .glitch::after {
+    color: #00fff9;
+    z-index: -2;
+    animation: shift 0.2s infinite reverse;
+}
+
+@keyframes shift {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-3px, 2px);
+    }
+    40% {
+        transform: translate(-3px, -2px);
+    }
+    60% {
+        transform: translate(3px, 2px);
+    }
+    80% {
+        transform: translate(3px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* --- ABOUT ME (Restored logic) --- */
+#section-aboutme {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+}
+
+#section-aboutme .content {
+    max-width: 600px;
+    margin-left: 10%;
+    padding-top: 100px;
+}
+
+#about-image {
+    position: absolute;
+    top: 0;
+    right: -25%;
+    width: 20%;
+    height: 100vh;
+    background: #444;
+    transition: all 0.8s ease-out;
+    z-index: 10;
+}
+
+#about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#section-projects {
+    display: none;
+    min-height: 100vh;
+    padding: 80px 5%;
+}
+
+.projects-grid {
+    display: grid;
+    /* Forces 3 columns */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px; /* Increased gap for a more "airy" feel */
+    margin-top: 50px;
+}
+
+.project-card {
+    background: #151515;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: 0.3s;
+    /* Increased the overall card size by setting a minimum height */
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    border-color: #ff00c1;
+    transform: translateY(-10px); /* Slightly more lift on hover */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.p-row {
+    padding: 20px; /* More internal padding for a larger look */
+    border-bottom: 1px solid #222;
+}
+
+.p-row.demo {
+    padding: 0;
+    height: 280px; /* Using your larger height preference */
+    overflow: hidden;
+    position: relative; /* Essential for stacking images */
+}
+
+.p-row.demo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition:
+        opacity 0.8s ease,
+        filter 0.5s ease,
+        transform 0.5s ease;
+
+    /* Stack the images */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0; /* Hide all by default */
+    z-index: 1;
+}
+
+/* Only the active image is visible */
+.p-row.demo img.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.project-card:hover .demo img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+}
+
+.p-row.demo {
+    padding: 0; /* Remove padding here so image touches the edges */
+    height: 200px; /* Increased from 180px */
+    overflow: hidden;
+}
+
+.p-carousel {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto; /* Enables scrolling */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hides scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Chrome/Safari */
+.p-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.p-carousel img {
+    flex: 0 0 100%; /* Each image takes full width */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: start;
+
+    /* Your original styling */
+    filter: grayscale(100%);
+    transition: 0.5s ease;
+}
+
+.p-row.demo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: 0.5s ease; /* Smoother transition */
+}
+
+.project-card:hover .demo img {
+    filter: grayscale(0%);
+    transform: scale(1.05); /* Subtle zoom effect on the image itself */
+}
+
+.p-row.desc {
+    flex-grow: 1;
+}
+
+/* --- CONTACT (Restored Original Style) --- */
+#section-contact {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 50px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.c-link {
+    display: block;
+    color: #00fff9;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border: 1px solid #00fff9;
+    padding: 10px;
+    margin: 10px 0;
+    transition: 0.3s;
+}
+
+.c-link:hover {
+    background: #00fff9;
+    color: #000;
+}
+
+.standard-back-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 12px 24px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* --- INTRO --- */
+#intro-overlay {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.notification {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: #595959;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition:
+        opacity 0.3s,
+        visibility 0.3s;
+}
+
+.notification.show {
+    visibility: visible;
+    opacity: 1;
+}
