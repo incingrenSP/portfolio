@@ -61,48 +61,49 @@ $(document).ready(function () {
   $(".project-card").click(function () {
     window.open($(this).data("url"), "_blank");
   });
+
   function startImageCycles() {
     $(".p-row.demo").each(function () {
       const $container = $(this);
       const $images = $container.find("img");
 
-      // Only start cycle if there's more than 1 image
       if ($images.length > 1) {
         setInterval(function () {
           const $active = $container.find("img.active");
           let $next = $active.next("img");
 
-          // If we're at the last image, go back to the first
           if ($next.length === 0) {
             $next = $images.first();
           }
 
           $active.removeClass("active");
           $next.addClass("active");
-        }, 3000); // Change image every 3 seconds
+        }, 3000);
       }
     });
   }
-
-  // Call the function
   startImageCycles();
 
-  document.getElementById("email-link").addEventListener("click", function (e) {
-    e.preventDefault(); // Prevents the page from jumping
-
-    const email = "samirpokharel002@gmail.com"; // Replace with your actual email
-
-    // Copy to clipboard
+  $("#email-link").click(function (e) {
+    e.preventDefault();
+    const email = "samirpokharel002@gmail.com";
     navigator.clipboard.writeText(email).then(() => {
-      const notification = document.getElementById("copy-notification");
+      $("#copy-notification").addClass("show");
+      setTimeout(() => $("#copy-notification").removeClass("show"), 2000);
+    });
+  });
 
-      // Show notification
-      notification.classList.add("show");
+  $("#btn-resume").click(function () {
+    const $slider = $("#resume-slider");
+    const resumePath = "cv/cv.pdf";
 
-      // Hide after 2 seconds
+    $slider.animate({ left: "0" }, 600, "swing", function () {
+      window.open(resumePath, "_blank");
       setTimeout(() => {
-        notification.classList.remove("show");
-      }, 2000);
+        $slider.animate({ left: "100%" }, 600, function () {
+          $(this).css("left", "-100%");
+        });
+      }, 800);
     });
   });
 });
