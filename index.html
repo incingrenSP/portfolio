@@ -1,186 +1,124 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Samir Pokharel</title>
-        <link rel="stylesheet" href="css/style.css" />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
-    <body>
-        <div id="intro-overlay">
-            <h1 id="intro-text" style="opacity: 0">Hello there, Welcome!</h1>
-        </div>
-
-        <div id="dashboard">
-            <div class="status-bar">
-                <span>LOC: KATHMANDU</span>
-                <span id="live-clock">00:00:00</span>
-                <span>WELCOME</span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+       <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-left-icons">
+                <div class="icon-btn settings-icon"></div>
+                <div class="icon-btn mail-icon"></div>
+                <div class="icon-btn alert-icon"></div>
             </div>
-            <div class="bg-watermark">SAMIR POKHAREL</div>
-            <div class="button-container">
-                <div class="box" id="btn-aboutme">
-                    <span class="glitch" data-text="About Me">About Me</span>
-                </div>
-                <div class="box" id="btn-projects">
-                    <span class="glitch" data-text="Projects">Projects</span>
-                </div>
-                <div class="box" id="btn-contact">
-                    <span class="glitch" data-text="Contact">Contact</span>
-                </div>
-                <div class="box" id="btn-resume">
-                    <span class="glitch" data-text="C.V.">C.V.</span>
-                </div>
+            <div class="top-center">
+                <div id="datetime"></div>
             </div>
-        </div>
-
-        <div id="section-aboutme">
-            <div class="content">
-                <h1>About Me</h1>
-                <p style="font-size: 16px">
-                    Hi, I'm Saming Pokharel, an undergraduate of Bachelors in
-                    Computer Engineering studying in Advanced College of
-                    Engineering and Management. I like to draw, and play video
-                    games to pass the time. In my downtime, I'm a casual reader
-                    who enjoys philosophy and a good story.
-                </p>
-                <button id="btn-back" class="standard-back-btn">← Back</button>
-            </div>
-            <div id="about-image">
-                <img src="img/profile.jpg" alt="Profile" />
-            </div>
-        </div>
-
-        <div id="section-projects">
-            <button id="btn-back-projects" class="standard-back-btn">
-                ← Back
-            </button>
-            <h1 class="page-title">Projects</h1>
-
-            <div class="projects-grid">
-                <div
-                    class="project-card"
-                    data-url="https://github.com/incingrenSP/online_sho"
-                >
-                    <div class="p-row title">
-                        <h3>Online Shop System</h3>
-                    </div>
-                    <div class="p-row demo">
-                        <div class="p-carousel">
-                            <img src="img/online_shop_1.png" alt="Slide 1" />
-                            <img src="img/online_shop_2.png" alt="Slide 2" />
-                            <img src="img/online_shop_3.png" alt="Slide 3" />
-                            <img src="img/online_shop_4.png" alt="Slide 4" />
-                            <img src="img/online_shop_5.png" alt="Slide 5" />
-                        </div>
-                    </div>
-                    <div class="p-row desc">
-                        <p>A simple digital shopping system.</p>
-                    </div>
-                    <div class="p-row tags">
-                        <span>C++</span>
-                    </div>
-                </div>
-                <div
-                    class="project-card"
-                    data-url="https://github.com/incingrenSP/cg-project"
-                >
-                    <div class="p-row title"><h3>Zelda-inspired RPG</h3></div>
-                    <div class="p-row demo">
-                        <div class="p-carousel">
-                            <img src="img/rpg_1.png" alt="Slide 1" />
-                            <img src="img/rpg_2.png" alt="Slide 2" />
-                            <img src="img/rpg_3.png" alt="Slide 3" />
-                            <img src="img/rpg_4.png" alt="Slide 4" />
-                            <img src="img/rpg_5.png" alt="Slide 5" />
-                        </div>
-                    </div>
-                    <div class="p-row desc">
-                        <p>A role-playing game developed using pygame.</p>
-                    </div>
-                    <div class="p-row tags">
-                        <span>Python</span>
-                    </div>
-                </div>
-
-                <div
-                    class="project-card"
-                    data-url="https://github.com/incingrenSP/fft_cnn"
-                >
-                    <div class="p-row title">
-                        <h3>
-                            Pneumonia Detection using Modified AlexNet and
-                            Inception
-                        </h3>
-                    </div>
-                    <div class="p-row demo">
-                        <div class="p-carousel">
-                            <img src="img/fft_1.png" alt="Slide 1" />
-                            <img src="img/fft_2.png" alt="Slide 2" />
-                            <img src="img/fft_3.png" alt="Slide 3" />
-                        </div>
-                    </div>
-                    <div class="p-row desc">
-                        <p>
-                            A supervised learning-based comparative group
-                            project on pneumonia detection using Fast Fourier
-                            Transform.
-                        </p>
-                    </div>
-                    <div class="p-row tags">
-                        <span>Jupyter Notebook</span> <span>Python</span>
-                    </div>
-                </div>
-
-                <div
-                    class="project-card"
-                    data-url="https://github.com/incingrenSP/portfolio"
-                >
-                    <div class="p-row title"><h3>Portfolio Site</h3></div>
-                    <div class="p-row demo">
-                        <div class="p-carousel">
-                            <img src="img/port_1.png" alt="Slide 1" />
-                            <img src="img/port_2.png" alt="Slide 2" />
-                            <img src="img/port_3.png" alt="Slide 3" />
-                            <img src="img/port_4.png" alt="Slide 4" />
-                        </div>
-                    </div>
-                    <div class="p-row desc">
-                        <p>Animated portfolio with jQuery transitions.</p>
-                    </div>
-                    <div class="p-row tags">
-                        <span>HTML/CSS</span> <span>jQuery</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="section-contact">
-            <div class="contact-card">
-                <h2>Connect</h2>
-                <a href="#" id="email-link" class="c-link">Email</a>
-                <a href="https://github.com/incingrenSP" class="c-link"
-                    >GitHub</a
-                >
-                <a
-                    href="https://www.linkedin.com/in/samir-pokharel-551734364/"
-                    class="c-link"
-                    >LinkedIn</a
-                >
-                <button id="btn-back-contact" class="standard-back-btn">
-                    Close
+            <div class="top-right">
+                <button class="close-btn" id="resetBtn">
+                    <span class="x-mark">×</span>
                 </button>
             </div>
         </div>
 
-        <div id="resume-slider" class="slide-curtain">
-            <h1>Opening Resume...</h1>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Sidebar -->
+            <div class="left-sidebar">
+                <button class="nav-button" data-section="about">
+                    <div class="button-layer top-layer"></div>
+                    <div class="button-layer bottom-layer">
+                        <div class="icon about-icon"></div>
+                        <span>About Me</span>
+                    </div>
+                </button>
+
+                <button class="nav-button" data-section="projects">
+                    <div class="button-layer top-layer"></div>
+                    <div class="button-layer bottom-layer">
+                        <div class="icon projects-icon"></div>
+                        <span>Projects</span>
+                    </div>
+                </button>
+
+                <button class="nav-button" data-section="certifications">
+                    <div class="button-layer top-layer"></div>
+                    <div class="button-layer bottom-layer">
+                        <div class="icon cert-icon"></div>
+                        <span>Certifications</span>
+                    </div>
+                </button>
+
+                <button class="nav-button" data-section="contact">
+                    <div class="button-layer top-layer"></div>
+                    <div class="button-layer bottom-layer">
+                        <div class="icon contact-icon"></div>
+                        <span>Contact Me</span>
+                    </div>
+                </button>
+
+                <button class="nav-button" data-section="cv">
+                    <div class="button-layer top-layer"></div>
+                    <div class="button-layer bottom-layer">
+                        <div class="icon cv-icon"></div>
+                        <span>CV</span>
+                    </div>
+                </button>
+            </div>
+            <!-- Center Hub -->
+            <div class="center-hub">
+                <div class="hub-glow"></div>
+                <div class="hub-content">
+                    <div id="centerImage" class="center-image">
+                        <img src="assets/images/profile/profile.jpg" alt="Profile">
+                        <!-- <div class="default-hub-text">PROFILE</div> -->
+                    </div>
+                    <div id="projectCarousel" class="project-carousel hidden">
+                        <div class="carousel-container"></div>
+                    </div>
+                </div>
+                <div class="hub-ring"></div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="right-sidebar" id="rightContent">
+                <div class="content-panel">
+                    <h2 id="panelTitle">Welcome</h2>
+                    <div id="panelContent" class="panel-content">
+                        <p>Good Morning, Good Afternoon, Good Evening, and Good Night to you...</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="copy-notification" class="notification">
-            Email copied to clipboard!
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="bottom-left">
+                <button class="power-btn" id="powerBtn">
+                    <div class="power-icon"></div>
+                </button>
+                <div class="status-text" id="statusText">Welcome</div>
+            </div>
+            <div class="bottom-center">
+                <div class="brand-text">SAMIR POKHAREL</div>
+            </div>
+            <div class="bottom-right">
+                <div class="portfolio-label">PORTFOLIO</div>
+            </div>
         </div>
 
-        <script src="js/script.js"></script>
-    </body>
+        <!-- Notification Toast -->
+        <div id="notification" class="notification hidden">
+            <span id="notificationText"></span>
+        </div>
+
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
 </html>
