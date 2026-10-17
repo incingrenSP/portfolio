@@ -1,470 +1,289 @@
-// Main JavaScript for Portfolio Website
 
-let currentSection = null;
-let currentProjectIndex = 0;
-let projects = [];
+const $ = (s) => document.querySelector(s);
+const data = () => portfolioData;
 
-// Initialize on DOM load
+const SECTIONS = ['about', 'projects', 'certifications', 'contact', 'cv'];
+const NAMES = { about: 'About Me', projects: 'Projects', certifications: 'Certifications', contact: 'Contact Me', cv: 'CV' };
+const PROFILE = 'assets/images/profile/profile.jpg';
+
+let current = null;
+let projIdx = 0;
+let imgIdx = 0;
+let projImgs = [];
+
 document.addEventListener('DOMContentLoaded', () => {
-    initializeDateTime();
-    initializeNavigation();
-    initializePowerButton();
-    initializeResetButton();
+    initClock();
+    initNav();
+    initPanelEvents();
+    initCarouselEvents();
+    initTopBar();
+    initPower();
+    initKeyboard();
+    initParallax();
+    resetWebsite();
 });
 
-// DateTime Update
-function initializeDateTime() {
-    function updateDateTime() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const month = months[now.getMonth()];
-        const day = String(now.getDate()).padStart(2, '0');
-        const year = now.getFullYear();
-        
-        const timeString = `${hours}:${minutes}:${seconds}`;
-        const dateString = `${month} ${day}, ${year}`;
-        
-        document.getElementById('datetime').innerHTML = `
-            <span class="time">${timeString}</span>
-            <span class="date">${dateString}</span>
-        `;
-    }
-    
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+
+// Fade the old content out, swap, then slide the new content in
+let swapTimer;
+function run(fn) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
+    const els = [$('.content-panel'), ...document.querySelectorAll('.hub-content > div')];
+    clearTimeout(swapTimer);
+    els.forEach((e) => e.classList.add('out'));
+    swapTimer = setTimeout(() => {
+        try { fn(); }
+        finally {
+            els.forEach((e) => { e.classList.remove('out', 'in'); void e.offsetWidth; e.classList.add('in'); });
+        }
+    }, 180);
 }
 
-// Navigation Buttons
-function initializeNavigation() {
-    const navButtons = document.querySelectorAll('.nav-button');
-    
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const section = button.dataset.section;
-            
-            // Remove active class from all buttons
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            // Update status text
-            updateStatusText(section);
-            
-            // Load section content
-            loadSection(section);
-            
-            currentSection = section;
-        });
-    });
+function greeting() {
+    const h = new Date().getHours();
+    return h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
 }
 
-// Update Status Text
-function updateStatusText(section) {
-    const statusText = document.getElementById('statusText');
-    const sectionNames = {
-        'about': 'About Me',
-        'projects': 'Projects',
-        'certifications': 'Certifications',
-        'contact': 'Contact Me',
-        'cv': 'CV'
+function setPanel(title, html, tag) {
+    $('#panelTitle').textContent = title;
+    $('#panelTag').textContent = tag;
+    $('#panelContent').innerHTML = html;
+    $('#rightContent').scrollTop = 0;
+}
+
+function setHub(src, alt) {
+    const img = $('#hubImg');
+    if (src && img.getAttribute('src') !== src) { img.src = src; }
+    if (alt) img.alt = alt;
+    
+    $('#centerImage').dataset.fit = (src === PROFILE) ? 'cover' : 'contain';
+    $('#centerImage').classList.remove('hidden');
+    $('#projectCarousel').classList.add('hidden');
+}
+
+function placeholder(text) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><rect width="400" height="400" fill="#222"/><text x="50%" y="50%" fill="#e8d44d" font-size="22" text-anchor="middle" dominant-baseline="middle">${text}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+function markSelected(i) {
+    document.querySelectorAll('.catalog-item').forEach((el, k) => el.classList.toggle('selected', k === i));
+}
+
+/* ---------- clock ---------- */
+
+function initClock() {
+    const clock = $('#clock');
+    const dateEl = $('#dateText');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const tick = () => {
+        const n = new Date();
+        const p = (v) => String(v).padStart(2, '0');
+        clock.textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+        dateEl.textContent = `${months[n.getMonth()]} ${p(n.getDate())}, ${n.getFullYear()}`;
     };
-    
-    statusText.textContent = sectionNames[section] || 'Welcome';
+    tick();
+    setInterval(tick, 1000);
 }
 
-// Load Section Content
-function loadSection(section) {
-    const panelTitle = document.getElementById('panelTitle');
-    const panelContent = document.getElementById('panelContent');
-    const centerImage = document.getElementById('centerImage');
-    const projectCarousel = document.getElementById('projectCarousel');
-    
-    // Hide carousel by default
-    projectCarousel.classList.add('hidden');
-    centerImage.classList.remove('hidden');
-    
-    switch(section) {
-        case 'about':
-            loadAbout(panelTitle, panelContent, centerImage);
-            break;
-        case 'projects':
-            loadProjects(panelTitle, panelContent, centerImage, projectCarousel);
-            break;
-        case 'certifications':
-            loadCertifications(panelTitle, panelContent, centerImage);
-            break;
-        case 'contact':
-            loadContact(panelTitle, panelContent, centerImage);
-            break;
-        case 'cv':
-            loadCV();
-            break;
-    }
+/* ---------- navigation ---------- */
+
+function initNav() {
+    document.querySelectorAll('.nav-button').forEach((b) =>
+        b.addEventListener('click', () => setSection(b.dataset.section))
+    );
 }
 
-// Load About Section
-function loadAbout(titleEl, contentEl, centerEl) {
-    titleEl.textContent = portfolioData.about.title;
-    contentEl.innerHTML = portfolioData.about.content;
-    
-    // Update center image
-    const img = centerEl.querySelector('img');
-    const text = centerEl.querySelector('.default-hub-text');
-    if (img) img.src = portfolioData.about.images;
-    if (text) text.textContent = 'ABOUT';
+function setSection(section) {
+    if (section === 'cv') return openCV();
+
+    document.querySelectorAll('.nav-button').forEach((b) => b.classList.toggle('active', b.dataset.section === section));
+    $('#statusText').textContent = NAMES[section] || 'Welcome';
+    current = section;
+
+    const views = { about: renderAbout, projects: renderProjects, certifications: renderCerts, contact: renderContact };
+    run(() => views[section]());
 }
 
-// Load Projects Section
-function loadProjects(titleEl, contentEl, centerEl, carouselEl) {
-    titleEl.textContent = 'Projects';
-    
-    // Create catalog in right panel
-    let catalogHTML = '<div class="catalog-grid">';
-    
-    portfolioData.projects.forEach((project, index) => {
-        catalogHTML += `
-            <div class="catalog-item" onclick="selectProject(${index})">
-                <div class="language">${project.language}</div>
-                <h3>${project.name}</h3>
-                <p class="description">${project.description}</p>
-                <a href="${project.github}" target="_blank" class="github-link" onclick="event.stopPropagation()">
-                    View on GitHub →
-                </a>
-            </div>
-        `;
-    });
-    
-    catalogHTML += '</div>';
-    contentEl.innerHTML = catalogHTML;
-    
-    // Show carousel in center
-    centerEl.classList.add('hidden');
-    carouselEl.classList.remove('hidden');
-    
-    projects = portfolioData.projects;
-    currentProjectIndex = 0;
+const tagFor = (s) => `// ${String(SECTIONS.indexOf(s) + 1).padStart(2, '0')} — ${NAMES[s].toUpperCase()}`;
+
+/* ---------- sections ---------- */
+
+function renderAbout() {
+    const a = data().about;
+    setPanel(a.title, a.content, tagFor('about'));
+    const img = Array.isArray(a.images) ? a.images[0] : a.images;
+    setHub(img || PROFILE, 'About');
+}
+
+function renderProjects() {
+    const list = data().projects;
+    const html = list.map((p, i) => `
+        <div class="catalog-item" style="--i:${i}" data-project="${i}">
+            <div class="language">${p.language}</div>
+            <h3>${p.name}</h3>
+            <p class="description">${p.description}</p>
+            <a class="github-link" href="${p.github}" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>`).join('');
+    setPanel('Projects', `<div class="catalog-grid">${html}</div>`, tagFor('projects'));
+    $('#centerImage').classList.add('hidden');
+    $('#projectCarousel').classList.remove('hidden');
+    selectProject(0);
+}
+
+function selectProject(i) {
+    projIdx = i;
+    imgIdx = 0;
+    markSelected(i);
     renderCarousel();
 }
 
-let currentImageIndex = 0;
-
+// Builds the carousel once per project; image changes only swap the <img>
 function renderCarousel() {
-    const container = document.querySelector('.carousel-container');
-    container.innerHTML = '';
-    
-    if (projects.length === 0) return;
-    
-    const currentProject = projects[currentProjectIndex];
-    const projectImages = currentProject.images || [];
-    
-    // Reset image index when switching projects
-    if (!window.lastProjectIndex || window.lastProjectIndex !== currentProjectIndex) {
-        currentImageIndex = 0;
-        window.lastProjectIndex = currentProjectIndex;
-    }
-    
-    // If no images, create placeholder
-    if (projectImages.length === 0) {
-        projectImages.push(createPlaceholderImage(currentProject.name));
-    }
-    
-    // Create carousel item
-    const item = document.createElement('div');
-    item.className = 'carousel-item active';
-    
-    const imgSrc = projectImages[currentImageIndex];
-    
-    item.innerHTML = `
-        <img src="${imgSrc}" alt="${currentProject.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect width=%22300%22 height=%22300%22 fill=%22%23333%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23e8d44d%22 font-size=%2220%22>${encodeURIComponent(currentProject.name)}</text></svg>'">
-    `;
-    
-    container.appendChild(item);
-    
-    // Add language badge
-    const languageBadge = document.createElement('div');
-    languageBadge.className = 'project-language';
-    languageBadge.textContent = currentProject.language;
-    container.appendChild(languageBadge);
-    
-    // Add description box
-    const descBox = document.createElement('div');
-    descBox.className = 'project-description-box';
-    descBox.innerHTML = `
-        <p>${currentProject.description}</p>
-    `;
-    container.appendChild(descBox);
-    
-    // Add navigation arrows if multiple images
-    if (projectImages.length > 1) {
-        addImageNavigationArrows(projectImages.length);
-        addImageIndicators(projectImages.length);
-    }
-    
-    // Add scroll listener for catalog
-    addCatalogScrollListener();
+    const p = data().projects[projIdx];
+    if (!p) return;
+    projImgs = p.images && p.images.length ? p.images : [placeholder(p.name)];  // no data mutation
+    const multi = projImgs.length > 1;
+    const dots = projImgs.map((_, i) => `<span class="indicator-dot" data-i="${i}"></span>`).join('');
+
+    $('.carousel-container').innerHTML = `
+        <div class="carousel-item"><img alt="${p.name}"></div>
+        <div class="project-language">${p.language}</div>
+        <div class="project-description-box"><p>${p.description}</p></div>
+        ${multi ? `<button class="carousel-arrow carousel-arrow-left" data-dir="-1" aria-label="Previous image">‹</button>
+                   <button class="carousel-arrow carousel-arrow-right" data-dir="1" aria-label="Next image">›</button>
+                   <div class="carousel-indicators">${dots}</div>` : ''}`;
+    showImage(0);
 }
 
-// Add navigation arrows for images
-function addImageNavigationArrows(totalImages) {
-    const container = document.querySelector('.carousel-container');
-    
-    // Left arrow
-    const leftArrow = document.createElement('button');
-    leftArrow.className = 'carousel-arrow carousel-arrow-left';
-    leftArrow.innerHTML = '‹';
-    leftArrow.onclick = () => navigateImage(-1, totalImages);
-    container.appendChild(leftArrow);
-    
-    // Right arrow
-    const rightArrow = document.createElement('button');
-    rightArrow.className = 'carousel-arrow carousel-arrow-right';
-    rightArrow.innerHTML = '›';
-    rightArrow.onclick = () => navigateImage(1, totalImages);
-    container.appendChild(rightArrow);
+function showImage(i) {
+    imgIdx = (i + projImgs.length) % projImgs.length;
+    const img = $('.carousel-item img');
+    if (!img) return;
+    const name = data().projects[projIdx].name;
+    img.onerror = () => { img.onerror = null; img.src = placeholder(name); };
+    img.style.animation = 'none';
+    void img.offsetWidth;            // restart fade animation
+    img.style.animation = '';
+    img.src = projImgs[imgIdx];
+    document.querySelectorAll('.indicator-dot').forEach((d, k) => d.classList.toggle('active', k === imgIdx));
 }
 
-// Add image indicators (dots)
-function addImageIndicators(totalImages) {
-    const container = document.querySelector('.carousel-container');
-    
-    const indicators = document.createElement('div');
-    indicators.className = 'carousel-indicators';
-    
-    for (let i = 0; i < totalImages; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'indicator-dot' + (i === currentImageIndex ? ' active' : '');
-        dot.onclick = () => {
-            currentImageIndex = i;
-            renderCarousel();
-        };
-        indicators.appendChild(dot);
-    }
-    
-    container.appendChild(indicators);
+function renderCerts() {
+    const list = data().certifications;
+    const html = list.map((c, i) => `
+        <div class="catalog-item" style="--i:${i}" data-cert="${i}">
+            <h3>${c.name}</h3>
+            <p class="description">${c.description}</p>
+        </div>`).join('');
+    setPanel('Certifications', `<div class="catalog-grid">${html}</div>`, tagFor('certifications'));
+    showCert(0);
 }
 
-// Navigate between images
-function navigateImage(direction, totalImages) {
-    currentImageIndex = (currentImageIndex + direction + totalImages) % totalImages;
-    renderCarousel();
+function showCert(i) {
+    const c = data().certifications[i];
+    if (!c) return;
+    markSelected(i);
+    setHub(c.images && c.images[0], c.name);
 }
 
-// Select Project
-function selectProject(index) {
-    currentProjectIndex = index;
-    currentImageIndex = 0;  // Reset to first image when changing projects
-    renderCarousel();
+function renderContact() {
+    const items = [
+        ['Email', 'Click to copy email to clipboard', 'data-action="copy"'],
+        ['GitHub', 'Visit my GitHub profile', `data-link="${data().contact.github}"`],
+        ['LinkedIn', 'Connect with me on LinkedIn', `data-link="${data().contact.linkedin}"`],
+    ];
+    const html = items.map(([h, d, attr], i) =>
+        `<div class="catalog-item" style="--i:${i}" ${attr}><h3>${h}</h3><p class="description">${d}</p></div>`).join('');
+    setPanel('Contact Me', `<div class="catalog-grid">${html}</div>`, tagFor('contact'));
+    setHub(PROFILE, 'Contact');
 }
 
-// Create placeholder image
-function createPlaceholderImage(text) {
-    return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="300" height="300" fill="%23333"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23e8d44d" font-size="20">${encodeURIComponent(text)}</text></svg>`;
+function openCV() {
+    // open immediately so popup blockers see the click, then play the exit effect
+    window.open(data().cv.pdfUrl, '_blank', 'noopener');
+    document.body.classList.add('zoom');
+    setTimeout(() => { resetWebsite(); document.body.classList.remove('zoom'); }, 450);
 }
 
-// Select Project
-function selectProject(index) {
-    currentProjectIndex = index;
-    renderCarousel();
-}
+/* ---------- events (delegated) ---------- */
 
-// Add catalog scroll listener
-function addCatalogScrollListener() {
-    const catalogGrid = document.querySelector('.catalog-grid');
-    if (!catalogGrid) return;
-    
-    let scrollTimeout;
-    catalogGrid.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            const items = catalogGrid.querySelectorAll('.catalog-item');
-            items.forEach((item, index) => {
-                const rect = item.getBoundingClientRect();
-                const catalogRect = catalogGrid.getBoundingClientRect();
-                
-                if (rect.top >= catalogRect.top && rect.top <= catalogRect.top + 100) {
-                    selectProject(index);
-                }
-            });
-        }, 100);
+function initPanelEvents() {
+    $('#rightContent').addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        const t = e.target.closest('[data-project],[data-cert],[data-action],[data-link]');
+        if (!t) return;
+        if (t.dataset.project !== undefined) selectProject(+t.dataset.project);
+        else if (t.dataset.cert !== undefined) showCert(+t.dataset.cert);
+        else if (t.dataset.action === 'copy') copyEmail();
+        else if (t.dataset.link) window.open(t.dataset.link, '_blank', 'noopener');
     });
 }
 
-// Load Certifications Section
-function loadCertifications(titleEl, contentEl, centerEl) {
-    titleEl.textContent = 'Certifications';
-    
-    // 1. Build the catalog for the right panel
-    let catalogHTML = '<div class="catalog-grid">';
-    portfolioData.certifications.forEach((cert, index) => {
-        catalogHTML += `
-            <div class="catalog-item" onclick="displayCertInHub(${index})">
-                <h3>${cert.name}</h3>
-                <p class="description">${cert.description}</p>
-            </div>
-        `;
+function initCarouselEvents() {
+    $('#projectCarousel').addEventListener('click', (e) => {
+        const arrow = e.target.closest('[data-dir]');
+        const dot = e.target.closest('[data-i]');
+        if (arrow) showImage(imgIdx + +arrow.dataset.dir);
+        else if (dot) showImage(+dot.dataset.i);
     });
-    catalogHTML += '</div>';
-    contentEl.innerHTML = catalogHTML;
-    
-    // 2. Display the first certificate by default
-    displayCertInHub(0);
 }
 
-function displayCertInHub(index) {
-    const cert = portfolioData.certifications[index];
-    const centerImage = document.getElementById('centerImage');
-    
-    const imgTag = centerImage.querySelector('img');
-    const textTag = centerImage.querySelector('.default-hub-text');
-    
-    if (imgTag && cert.images && cert.images.length > 0) {
-        imgTag.src = cert.images[0]; 
-        imgTag.alt = cert.name;
-    }
-    
-    if (textTag) {
-        textTag.textContent = 'CERTIFIED';
-    }
+function initTopBar() {
+    $('#resetBtn').addEventListener('click', () => run(resetWebsite));
+    $('#mailBtn').addEventListener('click', copyEmail);
+    $('#fsBtn').addEventListener('click', () => {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen?.();
+    });
 }
 
-// Load Contact Section
-function loadContact(titleEl, contentEl, centerEl) {
-    titleEl.textContent = 'Contact Me';
-    
-    const contactHTML = `
-        <div class="catalog-grid">
-            <div class="catalog-item" onclick="copyEmail()">
-                <h3>Email</h3>
-                <p class="description">Click to copy email to clipboard</p>
-            </div>
-            <div class="catalog-item" onclick="openLink('${portfolioData.contact.github}')">
-                <h3>GitHub</h3>
-                <p class="description">Visit my GitHub profile</p>
-            </div>
-            <div class="catalog-item" onclick="openLink('${portfolioData.contact.linkedin}')">
-                <h3>LinkedIn</h3>
-                <p class="description">Connect with me on LinkedIn</p>
-            </div>
-        </div>
-    `;
-    
-    contentEl.innerHTML = contactHTML;
-    
-    // Update center image
-    centerEl.innerHTML = '<img src="assets/images/profile/profile.jpg" alt="Contact">';
-}
-
-// Copy Email to Clipboard
 function copyEmail() {
-    navigator.clipboard.writeText(portfolioData.contact.email).then(() => {
-        showNotification('Email copied to clipboard');
-    }).catch(err => {
-        console.error('Failed to copy email:', err);
-        showNotification('Failed to copy email');
+    navigator.clipboard.writeText(data().contact.email)
+        .then(() => showNotification('Email copied to clipboard'))
+        .catch(() => showNotification('Failed to copy email'));
+}
+
+let toastTimer;
+function showNotification(msg) {
+    const n = $('#notification');
+    $('#notificationText').textContent = msg;
+    n.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => n.classList.remove('show'), 2000);
+}
+
+function resetWebsite() {
+    document.querySelectorAll('.nav-button').forEach((b) => b.classList.remove('active'));
+    $('#statusText').textContent = 'Welcome';
+    setPanel('Welcome', `<p>${greeting()}, and welcome. Pick a section on the left to begin.</p>`, '// 00 — HOME');
+    setHub(PROFILE, 'Profile');
+    current = null;
+}
+
+/* ---------- power, keyboard, parallax ---------- */
+
+function initPower() {
+    const off = $('#offline');
+    $('#powerBtn').addEventListener('click', () => off.classList.remove('hidden'));
+    $('#rebootBtn').addEventListener('click', () => { off.classList.add('hidden'); resetWebsite(); });
+}
+
+function initKeyboard() {
+    addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        const n = parseInt(e.key, 10);
+        if (n >= 1 && n <= SECTIONS.length) setSection(SECTIONS[n - 1]);
+        else if (e.key === 'Escape') run(resetWebsite);
     });
 }
 
-// Open External Link
-function openLink(url) {
-    window.open(url, '_blank');
-}
-
-// Show Notification
-function showNotification(message) {
-    const notification = document.getElementById('notification');
-    const notificationText = document.getElementById('notificationText');
-    
-    notificationText.textContent = message;
-    notification.classList.remove('hidden');
-    notification.classList.remove('hide');
-    
-    // Trigger slide in
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-    
-    // Start slide out after 2 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
-        notification.classList.add('hide');
-        
-        // Reset to hidden after animation
-        setTimeout(() => {
-            notification.classList.add('hidden');
-            notification.classList.remove('hide');
-        }, 500);
-    }, 2000);
-}
-
-// Load CV
-function loadCV() {
-    // Create zoom effect and redirect to PDF
-    document.body.style.transition = 'all 0.5s ease';
-    document.body.style.transform = 'scale(1.5)';
-    document.body.style.opacity = '0';
-    
-    setTimeout(() => {
-        window.open(portfolioData.cv.pdfUrl, '_blank');
-        resetWebsite();
-        document.body.style.transform = 'scale(1)';
-        document.body.style.opacity = '1';
-    }, 500);
-}
-
-// Reset Website
-function resetWebsite() {
-    // Remove active class from all buttons
-    const navButtons = document.querySelectorAll('.nav-button');
-    navButtons.forEach(btn => btn.classList.remove('active'));
-    
-    // Reset status text
-    document.getElementById('statusText').textContent = 'Welcome';
-    
-    // Reset panel
-    const panelTitle = document.getElementById('panelTitle');
-    const panelContent = document.getElementById('panelContent');
-    const centerImage = document.getElementById('centerImage');
-    const projectCarousel = document.getElementById('projectCarousel');
-    
-    panelTitle.textContent = 'Welcome';
-    panelContent.innerHTML = '<p>Good Morning, Good Afternoon, Good Evening, and Good Night to you...</p>';
-    
-    const profileImg = centerImage.querySelector('img');
-    if (profileImg) profileImg.src = 'assets/images/profile/profile.jpg';
-    const hubText = centerImage.querySelector('.default-hub-text');
-    if (hubText) hubText.textContent = 'PROFILE';
-    centerImage.classList.remove('hidden');
-    projectCarousel.classList.add('hidden');
-    
-    currentSection = null;
-}
-
-// Initialize Reset Button
-function initializeResetButton() {
-    const resetBtn = document.getElementById('resetBtn');
-    resetBtn.addEventListener('click', resetWebsite);
-}
-
-// Initialize Power Button
-function initializePowerButton() {
-    const powerBtn = document.getElementById('powerBtn');
-    powerBtn.addEventListener('click', () => {
-        // Create fade out effect
-        document.body.style.transition = 'opacity 0.5s ease';
-        document.body.style.opacity = '0';
-        
-        setTimeout(() => {
-            // Close the window or show a message
-            if (window.opener) {
-                window.close();
-            } else {
-                document.body.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 48px; color: #e8d44d;">SYSTEM OFFLINE</div>';
-            }
-        }, 500);
+function initParallax() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layers = document.querySelectorAll('[data-depth]');
+    addEventListener('pointermove', (e) => {
+        const x = e.clientX / innerWidth - 0.5;
+        const y = e.clientY / innerHeight - 0.5;
+        layers.forEach((l) => { l.style.translate = `${x * l.dataset.depth}px ${y * l.dataset.depth}px`; });
     });
 }

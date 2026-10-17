@@ -3,119 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>Samir Pokharel | Portfolio</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
-       <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="top-left-icons">
-                <div class="icon-btn settings-icon"></div>
-                <div class="icon-btn mail-icon"></div>
-                <div class="icon-btn alert-icon"></div>
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <span class="logo">SP</span>
+                <span class="tag">// PORTFOLIO v1.0</span>
             </div>
-            <div class="top-center">
-                <div id="datetime"></div>
+            <div class="top-center" id="datetime">
+                <span class="time" id="clock">00:00:00</span>
+                <span class="date" id="dateText"></span>
             </div>
             <div class="top-right">
-                <button class="close-btn" id="resetBtn">
-                    <span class="x-mark">×</span>
+                <button class="icon-btn" id="mailBtn" title="Copy email" aria-label="Copy email">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7"/></svg>
                 </button>
+                <button class="icon-btn" id="fsBtn" title="Fullscreen" aria-label="Toggle fullscreen">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                </button>
+                <button class="close-btn" id="resetBtn" title="Back to home" aria-label="Back to home"><span class="x-mark">×</span></button>
             </div>
-        </div>
+        </header>
 
         <!-- Main Content Area -->
-        <div class="main-content">
-            <!-- Left Sidebar -->
-            <div class="left-sidebar">
+        <main class="main-content">
+            <nav class="left-sidebar">
                 <button class="nav-button" data-section="about">
-                    <div class="button-layer top-layer"></div>
-                    <div class="button-layer bottom-layer">
-                        <div class="icon about-icon"></div>
-                        <span>About Me</span>
-                    </div>
+                    <span class="num">01</span>
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    <span class="lbl">About Me<small>Profile / Bio</small></span>
                 </button>
-
                 <button class="nav-button" data-section="projects">
-                    <div class="button-layer top-layer"></div>
-                    <div class="button-layer bottom-layer">
-                        <div class="icon projects-icon"></div>
-                        <span>Projects</span>
-                    </div>
+                    <span class="num">02</span>
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg>
+                    <span class="lbl">Projects<small>Selected work</small></span>
                 </button>
-
                 <button class="nav-button" data-section="certifications">
-                    <div class="button-layer top-layer"></div>
-                    <div class="button-layer bottom-layer">
-                        <div class="icon cert-icon"></div>
-                        <span>Certifications</span>
-                    </div>
+                    <span class="num">03</span>
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8 14l-2 8 6-3 6 3-2-8"/></svg>
+                    <span class="lbl">Certifications<small>Credentials</small></span>
                 </button>
-
                 <button class="nav-button" data-section="contact">
-                    <div class="button-layer top-layer"></div>
-                    <div class="button-layer bottom-layer">
-                        <div class="icon contact-icon"></div>
-                        <span>Contact Me</span>
-                    </div>
+                    <span class="num">04</span>
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7"/></svg>
+                    <span class="lbl">Contact Me<small>Get in touch</small></span>
                 </button>
-
                 <button class="nav-button" data-section="cv">
-                    <div class="button-layer top-layer"></div>
-                    <div class="button-layer bottom-layer">
-                        <div class="icon cv-icon"></div>
-                        <span>CV</span>
-                    </div>
+                    <span class="num">05</span>
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>
+                    <span class="lbl">CV<small>Open PDF</small></span>
                 </button>
-            </div>
+            </nav>
+
             <!-- Center Hub -->
-            <div class="center-hub">
-                <div class="hub-glow"></div>
+            <section class="center-hub">
+                <div class="hub-bg-text" data-depth="-24">PORTFOLIO</div>
+                <div class="hub-glow" data-depth="16"></div>
                 <div class="hub-content">
                     <div id="centerImage" class="center-image">
-                        <img src="assets/images/profile/profile.jpg" alt="Profile">
-                        <!-- <div class="default-hub-text">PROFILE</div> -->
+                        <img id="hubImg" src="assets/images/profile/profile.jpg" alt="Profile">
                     </div>
                     <div id="projectCarousel" class="project-carousel hidden">
                         <div class="carousel-container"></div>
                     </div>
                 </div>
-                <div class="hub-ring"></div>
-            </div>
+            </section>
 
             <!-- Right Sidebar -->
-            <div class="right-sidebar" id="rightContent">
+            <aside class="right-sidebar" id="rightContent">
                 <div class="content-panel">
+                    <div class="eyebrow" id="panelTag">// 00 — HOME</div>
                     <h2 id="panelTitle">Welcome</h2>
-                    <div id="panelContent" class="panel-content">
-                        <p>Good Morning, Good Afternoon, Good Evening, and Good Night to you...</p>
-                    </div>
+                    <div id="panelContent" class="panel-content"></div>
                 </div>
-            </div>
-        </div>
+            </aside>
+        </main>
 
         <!-- Bottom Bar -->
-        <div class="bottom-bar">
+        <footer class="bottom-bar">
             <div class="bottom-left">
-                <button class="power-btn" id="powerBtn">
-                    <div class="power-icon"></div>
-                </button>
+                <button class="power-btn" id="powerBtn" aria-label="Power off"><div class="power-icon"></div></button>
                 <div class="status-text" id="statusText">Welcome</div>
             </div>
-            <div class="bottom-center">
-                <div class="brand-text">SAMIR POKHAREL</div>
-            </div>
-            <div class="bottom-right">
-                <div class="portfolio-label">PORTFOLIO</div>
-            </div>
-        </div>
+            <div class="bottom-center"><div class="brand-text">SAMIR POKHAREL</div></div>
+            <div class="bottom-right"><div class="portfolio-label">PORTFOLIO</div></div>
+        </footer>
 
-        <!-- Notification Toast -->
-        <div id="notification" class="notification hidden">
-            <span id="notificationText"></span>
-        </div>
+        <div id="notification" class="notification" role="status"><span id="notificationText"></span></div>
+    </div>
 
+    <div id="offline" class="offline hidden">
+        <div>SYSTEM OFFLINE</div>
+        <button id="rebootBtn">REBOOT</button>
     </div>
 
     <script src="js/data.js"></script>
